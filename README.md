@@ -1,3 +1,9 @@
+ Notes Sharing Application
+
+ Description
+
+The Notes Sharing Application is a web-based platform that allows staff to upload and manage notes, while students can download the notes for their reference. The application is designed to streamline the sharing of educational resources within an institution.
+
 Features
 
 - Staff:
