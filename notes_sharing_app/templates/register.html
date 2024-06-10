@@ -1,0 +1,237 @@
+
+
+{% extends 'base.html' %}
+
+{% block title %}
+    register_page
+{% endblock %}
+
+{% block content %}
+<style>
+        /* Body styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+            color: #333; /* Set default text color */
+        }
+    
+        /* Header styles */
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+    
+        /* Main content container */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+    
+        /* Form styles */
+        form {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+    
+        /* Input field styles */
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        select,
+        .checkbox-group {
+            width: 100%;
+            padding: 12px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            transition: all 0.3s;
+        }
+    
+        /* Label styles */
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+    
+        /* Submit button styles */
+        input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 14px 24px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        input[type="submit"]:hover {
+            background-color: #45a049;
+            transform: scale(1.05);
+        }
+    
+        /* Error message styles */
+        .error-message {
+            color: red;
+        }
+    
+        /* Animation effects */
+        @keyframes slideInFromLeft {
+            0% {
+                transform: translateX(-100%);
+            }
+            100% {
+                transform: translateX(0);
+            }
+        }
+        @keyframes slideInFromRight {
+            0% {
+                transform: translateX(100%);
+            }
+            100% {
+                transform: translateX(0);
+            }
+        }
+        .slide-in-left {
+            animation: slideInFromLeft 0.5s ease;
+        }
+        .slide-in-right {
+            animation: slideInFromRight 0.5s ease;
+        }
+
+</style>
+
+<div class="container">
+    <header>
+        <h2>Register</h2>
+    </header>
+
+    <form id="registrationForm" action="result.html" method="POST" class="slide-in-left">
+        {% csrf_token %}
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+        
+        <label for="first_name">First Name:</label>
+        <input type="text" id="first_name" name="first_name" required>
+        
+        <label for="last_name">Last Name:</label>
+        <input type="text" id="last_name" name="last_name" required>
+        
+        <label for="userType">Select User Type:</label>
+        <select id="userType" name="userType" required class="slide-in-right">
+            <option value="" disabled selected>Select</option>
+            <option value="student">Student</option>
+            <option value="staff">Staff</option>
+        </select>
+        
+        <!-- Student details -->
+        <div id="studentDetails" style="display:none;">
+            <label for="registerNumber">Register Number:</label>
+            <input type="text" id="registerNumber" name="registerNumber" required>
+            
+            <label for="year">Year:</label>
+            <input type="text" id="year" name="year" required>
+            
+            <label for="dept">Department:</label>
+            <input type="text" id="dept" name="dept" required>
+            
+            <label for="section">Section:</label>
+            <input type="text" id="section" name="section" required>
+        </div>
+        
+        <!-- Staff details -->
+        <div id="staffDetails" style="display:none;">
+            <label for="staffId">Staff ID:</label>
+            <input type="text" id="staffId" name="staffId" required>
+            
+            <label for="position">Position:</label>
+            <div class="checkbox-group">
+                <input type="checkbox" id="assistantProfessor" name="position" value="Assistant Professor">
+                <label for="assistantProfessor">Assistant Professor</label><br>
+                <input type="checkbox" id="associateProfessor" name="position" value="Associate Professor">
+                <label for="associateProfessor">Associate Professor</label><br>
+                <input type="checkbox" id="professor" name="position" value="Professor">
+                <label for="professor">Professor</label><br>
+            </div>
+        </div>
+        
+        <!-- Password fields -->
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+        
+        <label for="confirmPassword">Confirm Password:</label>
+        <input type="password" id="confirmPassword" name="confirmPassword" required>
+        <span id="passwordMatchError" class="error-message" style="display:none;">Passwords do not match</span>
+        
+        <!-- Submit button -->
+        <input type="submit" id="submitButton" value="Submit">
+    </form>
+    
+</div>
+<script>
+    document.getElementById('userType').addEventListener('change', function() {
+        var studentDetails = document.getElementById('studentDetails');
+        var staffDetails = document.getElementById('staffDetails');
+        
+        if (this.value === 'student') {
+            studentDetails.style.display = 'block';
+            staffDetails.style.display = 'none';
+            // Add 'required' attribute to student details fields
+            document.getElementById('registerNumber').required = true;
+            document.getElementById('year').required = true;
+            document.getElementById('dept').required = true;
+            document.getElementById('section').required = true;
+            // Remove 'required' attribute from staff details fields
+            document.getElementById('staffId').removeAttribute('required');
+            document.getElementById('position').removeAttribute('required');
+        } else if (this.value === 'staff') {
+            studentDetails.style.display = 'none';
+            staffDetails.style.display = 'block';
+            // Add 'required' attribute to staff details fields
+            document.getElementById('staffId').required = true;
+            // Remove 'required' attribute from student details fields
+            document.getElementById('registerNumber').removeAttribute('required');
+            document.getElementById('year').removeAttribute('required');
+            document.getElementById('dept').removeAttribute('required');
+            document.getElementById('section').removeAttribute('required');
+        } else {
+            studentDetails.style.display = 'none';
+            staffDetails.style.display = 'none';
+            // Remove 'required' attribute from all fields
+            var allFields = document.querySelectorAll('#studentDetails input, #staffDetails input');
+            allFields.forEach(function(field) {
+                field.removeAttribute('required');
+            });
+        }
+    });
+
+    document.getElementById('registrationForm').addEventListener('submit', function(event) {
+        var password = document.getElementById('password').value;
+        var confirmPassword = document.getElementById('confirmPassword').value;
+        if (password !== confirmPassword) {
+            document.getElementById('passwordMatchError').style.display = 'block';
+            event.preventDefault(); // Prevent the form submission
+        }
+    });
+    
+    // Checkbox only allows one option to be selected
+    var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    checkboxes.forEach(function(checkbox) {
+        checkbox.addEventListener('change', function() {
+            checkboxes.forEach(function(cb) {
+                if (cb !== checkbox) {
+                    cb.checked = false;
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}
+

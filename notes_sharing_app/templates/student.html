@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Student Page
+{% endblock %}
+
+{% block content %}
+{% for x in student %}
+<h1>Welcome {{ x.first_name }}</h1>
+<p>Your REG NO: {{ x.register_number }} </p>
+{% endfor %}
+<h2>Notes</h2>
+<table>
+    <thead>
+        <tr>
+            <th>File Name</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for note in notes %}
+        <tr>
+            <td>{{ note.name }}</td>
+            <td><p></p></td>
+            <td><a href="notes\{{note.files}}" class="btn btn-primary" download>Download</a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

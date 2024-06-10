@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Staff Page
+{% endblock %}
+
+{% block content %}
+{% for x in staff %}
+    <h1>Welcome {{ x.first_name }}</h1>
+    <p>Your staff_id:{{ x.staff_id}} </p>
+    <form method="POST" enctype="multipart/form-data" action="upload">
+        {% csrf_token %}
+        <input type="text" id='name' name="name">
+        <input type="file"  id='file' name="file">
+        <input type="hidden" id='staff_id' name="staff_id" value={{x.staff_id}}>
+        <button type="submit" style="background-color: #4CAF50; /* Green */
+                                    border: none;
+                                    color: white;
+                                    padding: 10px 20px;
+                                    text-align: center;
+                                    text-decoration: none;
+                                    display: inline-block;
+                                    font-size: 16px;
+                                    margin: 4px 2px;
+                                    cursor: pointer;">Add Notes</button>
+    </form>
+    {% endfor %}
+    {% if files %}
+        <h2>Uploaded Files:</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>File Name</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for file in files %}
+                    <tr>
+                        <td>{{ file.name }}</td>
+                        <td>{{ file.files}}</td>
+                        <td>{{ file.staff_id}}</td>
+                       
+                        <td>
+                            <form method="POST" action="delete">
+                                {% csrf_token %}
+                                <input id='id' name="id" type="hidden" value={{file.id}}>
+                                <input id='staff_id' name="staff_id" type="hidden" value={{file.staff_id}}>
+                                <button type="submit" style="background-color: #f44336; /* Red */
+                                                            border: none;
+                                                            color: white;
+                                                            padding: 10px 20px;
+                                                            text-align: center;
+                                                            text-decoration: none;
+                                                            display: inline-block;
+                                                            font-size: 16px;
+                                                            margin: 4px 2px;
+                                                            cursor: pointer;">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No files uploaded yet.</p>
+    {% endif %}
+{% endblock %}
